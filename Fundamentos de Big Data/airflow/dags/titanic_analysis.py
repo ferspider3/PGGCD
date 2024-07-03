@@ -28,6 +28,7 @@ def analyze_sex_survivors(**kwargs):
     df = pd.DataFrame.from_dict(df_dict)
     
     sex_survivors = df[df['Survived'] == 1]['Sex'].value_counts().to_dict()
+    sex_survivors = {'Feminino' if k == 'female' else 'Masculino': v for k, v in sex_survivors.items()}
     ti.xcom_push(key='sex_survivors', value=sex_survivors)
 
 def analyze_embarked_survivors(**kwargs):
@@ -93,7 +94,7 @@ def generate_report(**kwargs):
     
     pdf.cell(200, 10, txt="Sobreviventes por Gênero:", ln=True)
     for key, value in sex_survivors.items():
-        pdf.cell(200, 10, txt=f"    {key.capitalize()}: {value}", ln=True)
+        pdf.cell(200, 10, txt=f"    {key}: {value}", ln=True)
     
     pdf.cell(200, 10, txt="Sobreviventes por Porto de Embarque:", ln=True)
     portos = {'C': 'Cherbourg', 'Q': 'Queenstown', 'S': 'Southampton'}
